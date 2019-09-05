@@ -5,6 +5,8 @@ Curd
 @endsection
 
 @section('content')
+
+
 <h3>Registration form</h3>
 <form action="{{route('curd.in')}}" method="post">
 @csrf
@@ -16,4 +18,5 @@ Curd
     <tr> <td><input type="submit" value="Save Record" ></td> <td> <label for="submit"></label> </td> </tr>
 </table>
 </form>
-@endsection 
+
+@endsection

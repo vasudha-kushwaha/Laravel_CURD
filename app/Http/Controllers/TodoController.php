@@ -12,6 +12,10 @@ use DB;
 
 class TodoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function home()
     {
         return view('curd.myhome');
@@ -32,56 +36,24 @@ class TodoController extends Controller
     {
         return view('curd.adminlogin');
     }
-    public function curd()
+    public function php_directives()
     {
-        return view('curd.curd');
-    }
-    // public function insert()
-    // {
-    //     $todo = new Todo;
-    //     $todo->heading="laravel";
-    //     $todo->tags="model";
-    //     $todo->content="laravel is complicated";
-    //     $todo->writer="vasu";
-    //     $todo->save();
-    // }
-    public function in(Request $request)
-    {
-        $heading=$request->input('h');
-        $tags=$request->input('t');
-        $content=$request->input('c');
-        $writer=$request->input('w');
+        /* Passing values from controller to view file
+          There are 4 ways to pass the values to the view.
+          1-using array function.- "array"
+          2-using compact function.- compact()
+          3-using with.- with([])
+          4-using withVariablename.- withName""
+        */
+        $name="Vasu";
+        $users=["Sandeep","Abhishek","Unnati","Sanjay","Anita","Anjali","Sushant"];
+        //$users=[];
+        //return view('curd.bladedirectives', array("users"=>$users, "name"=>$name)); //using array function.
 
-        $data=array('heading'=>$heading,"tags"=>$tags,"content"=>$content,"writer"=>$writer);
+        return view('curd.bladedirectives', compact("name","users")); //using compact function.
 
-        DB::table('todos')->insert($data);
-        echo "Record inserted successfully.<br/>";
-        echo '<a href = "/view_records">Click Here</a> to go back.';
-    }
-    public function disp()
-    {
-        $todos = DB::select('select * from todos');
-        return view('curd.display', ['todos'=>$todos]);
-    }
-    public function show($id)
-    {
-        $todos = DB::select('select * from todos where id = ?', [$id]);
-        return view('curd.update', ['todos'=>$todos]);
-    }
-    public function edit(Request $request, $id)
-    {
-        $heading=$request->input('heading');
-        $tags=$request->input('tags');
-        $content=$request->input('content');
-        $writer=$request->input('writer');
-        DB::update(' update todos set heading=?, tags=?, content=?, writer=? where id=?', [$heading, $tags, $content, $writer,$id]);
-        echo "Record updated successfully.<br/>";
-        echo '<a href = "/view_records">Click Here</a> to go back.';
-    }
-    public function destroy($id)
-    {
-        $todos = DB::select('delete from todos where id = ?', [$id]);
-        echo "Record deleted successfully.<br/>";
-        echo '<a href = "/view_records">Click Here</a> to go back.';
+        //return view('curd.bladedirectives')->with(["users"=>$users, "name"=>$name]); //using with.
+
+        //return view('curd.bladedirectives')->withUsers($users)->withName($name); //using withVariablename.
     }
 }

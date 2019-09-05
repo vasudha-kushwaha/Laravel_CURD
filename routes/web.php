@@ -20,7 +20,9 @@ Route::get('/', function () {
 Route::get('todo', 'TodoController@index')->name('curd.view');
 //same name kai 2 route ni hotai h
 
-Route::get('home', 'TodoController@home')->name('curd.home');
+Route::get('php_directives', 'TodoController@php_directives')->name('php_directives');
+
+Route::get('myhome', 'TodoController@home')->name('curd.myhome');
 
 Route::get('about', 'TodoController@about')->name('curd.about');
 
@@ -30,18 +32,24 @@ Route::get('authors', 'TodoController@authors')->name('curd.authors');
 
 Route::get('admin', 'TodoController@adminlogin')->name('curd.adminlogin');
 
-Route::get('curd', 'TodoController@curd')->name('curd.curd');
+Route::get('curd', 'CurdController@curd')->name('curd.curd');
 
 //Route::get('insert', 'TodoController@insert')->name('curd.insert');
 
-Route::post('in','TodoController@in')->name('curd.in');
+Route::post('in','CurdController@in')->name('curd.in');
 
-Route::get('view_records','TodoController@disp')->name('curd.display');
+Route::get('view_records','CurdController@disp')->name('curd.display');
 
-Route::get('edit/{id}','TodoController@show');
+//Route::get('edit/{id}','CurdController@show');
 
-Route::post('edit/{id}','TodoController@edit');
+Route::post('edit/{id}','CurdController@edit')->name('user.edit');
 
-Route::get('delete/{id}','TodoController@destroy'); 
+Route::get('delete/{id}','CurdController@destroy'); 
+
+//Route::post('Ed','CurdController@show')->name('user.edit'); 
 
 //Todos Routes-End>middelware('auth')
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+

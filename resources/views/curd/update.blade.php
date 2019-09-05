@@ -12,7 +12,7 @@ Edit Records
                 <form action="/edit/<?php echo $todos[0]->id; ?>" method="post">
                 <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
                 @csrf
-                <table>
+                <table> 
                         <tr> 
                                 <td>Id</td>
                                 <td> <input type="text" name="id" value='<?php echo $todos[0]->id; ?>' readonly > </td>

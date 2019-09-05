@@ -18,5 +18,5 @@ myHome
         </div>
         <div class="col l6 m6 s12">
         </div>
-</div>
+</div> 
 @endsection

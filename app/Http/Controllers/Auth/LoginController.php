@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+use Illuminate\Http\Request; //include
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -36,4 +36,16 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    // protected function credentials(Request $request)
+    // {
+    //     /// this method is overriden form Illuminate\Foundation\Auth\AuthenticatesUsers; class
+    //     $field = filter_var($request->get($this->uname()), FILTER_VALIDATE_EMAIL)
+    //         ? $this->uname()
+    //         : 'username';
+
+    //     return [
+    //         $field => $request->get($this->uname()),
+    //         'password' => $request->password,
+    //     ];
+    // }
 }

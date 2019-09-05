@@ -34,7 +34,7 @@
       <div class="nav-wrapper  green">
         <a href="#!" class="brand-logo">SunPrime</a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="{{ route('curd.home') }}">Home</a></li>
+          <li><a href="{{ route('curd.myhome') }}">Home</a></li>
           <li><a href="{{ route('curd.about') }}">About</a></li>
           <li><a href="{{ route('curd.blogs') }}">Blogs</a></li>
           <li><a href="{{ route('curd.authors') }}">Authors</a></li>
