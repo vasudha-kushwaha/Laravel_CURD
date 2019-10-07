@@ -17,6 +17,15 @@ myHome
         <br><br><br><br>
         </div>
         <div class="col l6 m6 s12">
+        <br><br>
+        <form method="post" action="{{ route('import.data') }}" enctype="multipart/form-data">
+        @csrf
+        <input type="file" name="upload-excel" id="upload-excel">
+        <input type="submit" name="submit" value="upload excel">
+        <br><br>
+        <a class="btn green" style="border-radius: 20px;" href="{{ route('export') }}">Export User Data</a>
+    </form>
+
         </div>
 </div> 
 @endsection

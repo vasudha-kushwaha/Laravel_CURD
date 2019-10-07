@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Validator;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Todo;
 use DB;
+use Session;
 
 class CurdController extends Controller
 {
@@ -25,6 +28,13 @@ class CurdController extends Controller
     }
     public function in(Request $request)
     {
+        Validator::make($request->all(), [
+            "h"=>"required",
+            "t"=>"required",
+            "c"=>"required",
+            "w"=>"required",
+        ])->validate();
+        //dd($request->all());
         //using tinker command -------------
         // $heading=$request->input('h');
         // $tags=$request->input('t');
@@ -58,13 +68,13 @@ class CurdController extends Controller
             "writer" => $request->input('w')
         ]);
         $todo->save();
-
-        echo "Record inserted successfully.<br/>";
-        echo '<a href = "/view_records">Click Here</a> to go back.';
+            Session::flash('success',"Record inserted successfully");
+            //return redirect()->back();
+            return redirect()->route('curd.display');
     }
     public function disp()
     {
-        $todos = DB::select('select * from todos');
+        $todos = DB::select('select * from todos'); 
         return view('curd.display', ['todos'=>$todos]);
     }
     public function show($id)
@@ -76,15 +86,35 @@ class CurdController extends Controller
         return view('curd.update', ["todos"=>$todos]);
 
     }
-    public function edit(Request $request, $id)
+    public function edit(Request $request)
     {
-        $heading=$request->input('h1');
-        $tags=$request->input('t1'); 
-        $content=$request->input('c1');
-        $writer=$request->input('w1');
-        DB::update(' update todos set heading=?, tags=?, content=?, writer=? where id=?', [$heading, $tags, $content, $writer,$id]);
-        echo "Record updated successfully.<br/>";
-        echo '<a href = "/view_records">Click Here</a> to go back.';
+        $todo=new Todo;
+
+        $id=$request->input('todo-id');
+        $heading=$request->input('h');
+        $tags=$request->input('t');
+        $content=$request->input('c');
+        $writer=$request->input('w');
+
+        $data=$todo->find($id);
+        $data->heading = $heading;
+        $data->tags = $tags;
+        $data->content= $content;
+        $data->writer = $writer;
+        $data->save();
+        return redirect()->back();
+        //disp();
+
+        //print_r($data);
+        //dd($request->all());
+        //$todo = Todo::find($request->input('todo-id'));
+       // $todo->update($request->all());
+        //dd($todo);
+
+        //return redirect()->route('curd.display');
+        // DB::update(' update todos set heading=?, tags=?, content=?, writer=? where id=?', [$heading, $tags, $content, $writer,$id]);
+        // echo "Record updated successfully.<br/>";
+        // echo '<a href = "/view_records">Click Here</a> to go back.';
     }
     public function destroy($id)
     {
@@ -93,4 +123,26 @@ class CurdController extends Controller
         echo '<a href = "/view_records">Click Here</a> to go back.';
     }
 
+    public function inlineEdit()
+    {
+        $todos = DB::select('select * from todos'); 
+        return view('curd.inline', compact("todos"));
+
+        // return view('curd.inline', ['todos'=>$todos]);
+    }
+    public function inlineUpdate(Request $request)
+    {
+        //$todo_pk = base64_encode($todo->id);  
+        try
+        {
+            $todo_id = base64_decode($request->id);
+            $data=\App\Todo::findOrFail($todo_id)->update([$request->name => $request->value]);
+            dd($data);
+            //return response(['success' => true, 'msg' => 'Done']);
+        } 
+        catch (\Illuminate\Database\QueryException $ex)
+        {
+            return response("Not Accepted:406 = " . $this->error_msg = $ex->errorInfo[2], 500);
+        }
+    }
 }

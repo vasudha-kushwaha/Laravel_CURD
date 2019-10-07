@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Todo;
 use DB;
-
-
+//use Excel;
 
 class TodoController extends Controller
 {
@@ -55,5 +55,38 @@ class TodoController extends Controller
         //return view('curd.bladedirectives')->with(["users"=>$users, "name"=>$name]); //using with.
 
         //return view('curd.bladedirectives')->withUsers($users)->withName($name); //using withVariablename.
+    }
+    public function importExportView()
+    {
+        return view('curd.myhome');
+    }
+    public function importData(Request $request)
+    {
+        if($request->hasFile('upload-excel'))
+        {
+            $path=$request->file('upload-excel')->getRealPath();
+            $data=\Excel::import($path)->get();
+            if($data->count())
+            {
+                foreach($data as $key => $value)
+                {
+                    $list[]=['heading'=>$value->heading, 'tags'=>$value->tags, 'content'=>$value->content, 'writer'=>$value->writer];
+                }
+                if(!empty($list))
+                {
+                    Todo::insert($list);
+                    \session::flash('success', 'File imported successfully');
+                }
+            }
+            else
+            {
+                \session::flash('warning', 'no file to import');
+            }
+        }
+        return redirect::back();
+    }
+    public function export()
+    {
+        return Excel::download(new UsersExport, 'users.xlsx');
     }
 }
